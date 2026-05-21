@@ -1,3 +1,5 @@
+import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
 import { useMemo, useState } from "react";
 import {
@@ -23,6 +25,7 @@ import RestaurantCardFeatured from "../../components/home/RestaurantCardFeatured
 import SearchBlock from "../../components/home/SearchBlock";
 import TopSection from "../../components/home/TopSection";
 import { useStatusBarStyle } from "../../hooks/useStatusBarStyle";
+import { AppStackParamList } from "../../navigation/types";
 
 const FADE_HEIGHT = 80;
 
@@ -41,10 +44,15 @@ function HomeScreen() {
   useStatusBarStyle("light");
   const { colors, isDarkMode } = useTheme();
   const { top, bottom } = useSafeAreaInsets();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<AppStackParamList>>();
   const scrollY = useSharedValue(0);
   const [topHeight, setTopHeight] = useState(0);
 
   const headerGreen = isDarkMode ? colors.primaryDark : colors.primary;
+
+  const openRestaurant = (id: string) =>
+    navigation.navigate("RestaurantDetail", { restaurantId: id });
 
   const scrollHandler = useAnimatedScrollHandler({
     onScroll: (e) => {
@@ -90,6 +98,7 @@ function HomeScreen() {
           <SearchBlock
             scrollY={scrollY}
             collapseRange={topHeight || 200}
+            onPress={() => navigation.navigate("Search" as never)}
           />
         );
 
@@ -113,11 +122,13 @@ function HomeScreen() {
                   <RestaurantCardCompact
                     item={pair[0]}
                     width={COMPACT_CARD_WIDTH}
+                    onPress={() => openRestaurant(pair[0].id)}
                   />
                   {pair[1] ? (
                     <RestaurantCardCompact
                       item={pair[1]}
                       width={COMPACT_CARD_WIDTH}
+                      onPress={() => openRestaurant(pair[1]!.id)}
                     />
                   ) : null}
                 </View>
@@ -146,7 +157,10 @@ function HomeScreen() {
       case "featuredItem":
         return (
           <View style={styles.featuredWrap}>
-            <RestaurantCardFeatured item={item.item} />
+            <RestaurantCardFeatured
+              item={item.item}
+              onPress={() => openRestaurant(item.item.id)}
+            />
           </View>
         );
     }

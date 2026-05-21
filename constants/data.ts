@@ -163,3 +163,196 @@ export const featured: Restaurant[] = [
     tags: ["Chef's pick"],
   },
 ];
+
+export type MenuCategory = {
+  id: string;
+  name: string;
+};
+
+export type MenuItem = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: ImageSourcePropType;
+  category: string;
+};
+
+export const menuCategories: MenuCategory[] = [
+  { id: "popular", name: "Popular" },
+  { id: "bowls", name: "Bowls" },
+  { id: "salads", name: "Salads" },
+  { id: "wraps", name: "Wraps" },
+  { id: "smoothies", name: "Smoothies" },
+];
+
+export type OrderStatus = "placed" | "preparing" | "on-the-way" | "delivered";
+
+export type ActiveOrder = {
+  id: string;
+  orderNumber: string;
+  restaurantName: string;
+  image: ImageSourcePropType;
+  itemCount: number;
+  status: Exclude<OrderStatus, "delivered">;
+  etaMinutes: number;
+  rider?: { name: string };
+};
+
+export type PastOrder = {
+  id: string;
+  restaurantName: string;
+  image: ImageSourcePropType;
+  date: string;
+  total: number;
+  status: "delivered" | "cancelled";
+};
+
+export const activeOrders: ActiveOrder[] = [
+  {
+    id: "o1",
+    orderNumber: "88219",
+    restaurantName: "Green Bowl Kitchen",
+    image: require("../assets/images/items/menu-item1-resize.png"),
+    itemCount: 3,
+    status: "preparing",
+    etaMinutes: 15,
+    rider: { name: "Shivam" },
+  },
+];
+
+export const pastOrders: PastOrder[] = [
+  {
+    id: "p1",
+    restaurantName: "Avocado Avenue",
+    image: require("../assets/images/items/menu-item7-resize.png"),
+    date: "Oct 24",
+    total: 325,
+    status: "delivered",
+  },
+  {
+    id: "p2",
+    restaurantName: "Sprout & Spoon",
+    image: require("../assets/images/items/menu-item2-resize.png"),
+    date: "Oct 21",
+    total: 450,
+    status: "delivered",
+  },
+  {
+    id: "p3",
+    restaurantName: "The Verdant Plate",
+    image: require("../assets/images/items/menu-item5-resize.png"),
+    date: "Oct 18",
+    total: 285,
+    status: "delivered",
+  },
+];
+
+export const menu: MenuItem[] = [
+  {
+    id: "m1",
+    name: "Buddha Power Bowl",
+    description:
+      "Quinoa, roasted veggies, chickpeas, avocado and tahini dressing.",
+    price: 399,
+    image: require("../assets/images/items/menu-item1-resize.png"),
+    category: "popular",
+  },
+  {
+    id: "m2",
+    name: "Salmon Quinoa Bowl",
+    description:
+      "Grilled salmon over fluffy quinoa with kale and citrus vinaigrette.",
+    price: 549,
+    image: require("../assets/images/items/menu-item2-resize.png"),
+    category: "popular",
+  },
+  {
+    id: "m3",
+    name: "Avocado Toast",
+    description:
+      "Toasted sourdough, smashed avocado, hemp seeds and microgreens.",
+    price: 319,
+    image: require("../assets/images/items/menu-item3-resize.png"),
+    category: "popular",
+  },
+  {
+    id: "m4",
+    name: "Acai Power Bowl",
+    description:
+      "Acai blend topped with granola, berries, banana and a drizzle of honey.",
+    price: 449,
+    image: require("../assets/images/items/menu-item4-resize.png"),
+    category: "popular",
+  },
+  {
+    id: "m5",
+    name: "Mediterranean Bowl",
+    description:
+      "Couscous, feta, kalamata olives, falafel and tzatziki sauce.",
+    price: 459,
+    image: require("../assets/images/items/menu-item5-resize.png"),
+    category: "bowls",
+  },
+  {
+    id: "m6",
+    name: "Asian Sesame Bowl",
+    description:
+      "Brown rice, edamame, sesame seeds and ginger-soy glaze.",
+    price: 399,
+    image: require("../assets/images/items/menu-item6-resize.png"),
+    category: "bowls",
+  },
+  {
+    id: "m7",
+    name: "Burrito Bowl",
+    description:
+      "Black beans, brown rice, salsa, guacamole and cilantro lime crema.",
+    price: 429,
+    image: require("../assets/images/items/menu-item7-resize.png"),
+    category: "bowls",
+  },
+  {
+    id: "m8",
+    name: "Caesar Kale Salad",
+    description:
+      "Crisp kale tossed with shaved parmesan, croutons and lemon dressing.",
+    price: 349,
+    image: require("../assets/images/items/menu-item8-resize.png"),
+    category: "salads",
+  },
+  {
+    id: "m9",
+    name: "Rainbow Salad",
+    description:
+      "Mixed greens, beets, carrots, sprouts with citrus vinaigrette.",
+    price: 329,
+    image: require("../assets/images/items/menu-item9-resize.png"),
+    category: "salads",
+  },
+  {
+    id: "m10",
+    name: "Veggie Hummus Wrap",
+    description:
+      "Whole grain wrap with hummus, roasted veggies and sprouts.",
+    price: 279,
+    image: require("../assets/images/items/menu-item10-resize.png"),
+    category: "wraps",
+  },
+  {
+    id: "m11",
+    name: "Green Goddess",
+    description: "Spinach, mango, banana, coconut water and lime.",
+    price: 249,
+    image: require("../assets/images/items/menu-item11-resize.png"),
+    category: "smoothies",
+  },
+  {
+    id: "m12",
+    name: "Berry Burst",
+    description: "Strawberry, blueberry, almond milk and chia.",
+    price: 269,
+    image: require("../assets/images/items/menu-item12-resize.png"),
+    category: "smoothies",
+  },
+];

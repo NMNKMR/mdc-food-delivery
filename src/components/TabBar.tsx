@@ -58,6 +58,7 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
             typeof options.tabBarLabel === "string"
               ? options.tabBarLabel
               : route.name;
+          const badge = options.tabBarBadge;
 
           const onPress = () => {
             const event = navigation.emit({
@@ -85,11 +86,30 @@ function CustomTabBar({ state, descriptors, navigation }: BottomTabBarProps) {
                 },
               ]}
             >
-              <Ionicons
-                name={iconFor(route.name as keyof AppTabsParamList, focused)}
-                size={22}
-                color={focused ? colors.onPrimary : colors.tabBarInactive}
-              />
+              <View>
+                <Ionicons
+                  name={iconFor(route.name as keyof AppTabsParamList, focused)}
+                  size={22}
+                  color={focused ? colors.onPrimary : colors.tabBarInactive}
+                />
+                {badge != null && badge !== 0 ? (
+                  <View
+                    style={[
+                      styles.badge,
+                      { backgroundColor: colors.badge },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        styles.badgeText,
+                        { color: colors.badgeText },
+                      ]}
+                    >
+                      {badge}
+                    </Text>
+                  </View>
+                ) : null}
+              </View>
               {focused ? (
                 <Text
                   style={[
@@ -157,5 +177,21 @@ const styles = StyleSheet.create({
   divider: {
     height: 36,
     width: 1,
-  }
+  },
+  badge: {
+    position: "absolute",
+    top: -6,
+    right: -10,
+    minWidth: 18,
+    height: 18,
+    paddingHorizontal: 4,
+    borderRadius: 9,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: "700",
+    lineHeight: 14,
+  },
 });

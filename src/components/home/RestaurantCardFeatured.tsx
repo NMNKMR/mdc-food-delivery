@@ -14,13 +14,17 @@ import { Restaurant } from "../../../constants/data";
 
 type Props = {
   item: Restaurant;
+  onPress?: () => void;
 };
 
-function RestaurantCardFeatured({ item }: Props) {
+function RestaurantCardFeatured({ item, onPress }: Props) {
   const { colors } = useTheme();
 
   return (
-    <Pressable style={[styles.card, { backgroundColor: colors.surface }]}>
+    <Pressable
+      onPress={onPress}
+      style={[styles.card, { backgroundColor: colors.surface }]}
+    >
       <View>
         <ImageBackground
           source={item.image}

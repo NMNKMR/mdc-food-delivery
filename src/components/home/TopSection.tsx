@@ -37,7 +37,7 @@ function TopSection({ onLayout }: Props) {
                 { color: colors.white, opacity: 0.85 },
               ]}
             >
-              Delivery location
+              Delivery location (Home)
             </Text>
             <Ionicons
               name="chevron-down"
@@ -78,7 +78,7 @@ function TopSection({ onLayout }: Props) {
           { color: colors.white },
         ]}
       >
-        What you'd like{"\n"}to eat for today?
+        Choose your next{"\n"}healthy meal !
       </Text>
     </View>
   );

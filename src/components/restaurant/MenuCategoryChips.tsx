@@ -1,5 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
 import {
   Pressable,
   ScrollView,
@@ -8,14 +6,19 @@ import {
   TextStyle,
   View,
 } from "react-native";
+import { MenuCategory } from "../../../constants/data";
 import { radius, spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
 import { useTheme } from "../../../context/theme";
-import { categories } from "../../../constants/data";
 
-function CategoriesRow() {
+type Props = {
+  categories: MenuCategory[];
+  activeId: string;
+  onSelect: (id: string) => void;
+};
+
+function MenuCategoryChips({ categories, activeId, onSelect }: Props) {
   const { colors } = useTheme();
-  const [active, setActive] = useState("all");
 
   return (
     <View style={[styles.wrap, { backgroundColor: colors.background }]}>
@@ -25,11 +28,11 @@ function CategoriesRow() {
         contentContainerStyle={styles.content}
       >
         {categories.map((cat) => {
-          const isActive = active === cat.id;
+          const isActive = activeId === cat.id;
           return (
             <Pressable
               key={cat.id}
-              onPress={() => setActive(cat.id)}
+              onPress={() => onSelect(cat.id)}
               style={[
                 styles.chip,
                 {
@@ -39,14 +42,6 @@ function CategoriesRow() {
                 },
               ]}
             >
-              {cat.icon ? (
-                <Ionicons
-                  name={cat.icon}
-                  size={14}
-                  color={isActive ? colors.onPrimary : colors.primary}
-                  style={styles.icon}
-                />
-              ) : null}
               <Text
                 style={[
                   typography.labelLg as TextStyle,
@@ -65,25 +60,19 @@ function CategoriesRow() {
   );
 }
 
-export default CategoriesRow;
+export default MenuCategoryChips;
 
 const styles = StyleSheet.create({
   wrap: {
     paddingVertical: spacing.md,
-    marginTop: -1,
   },
   content: {
     paddingHorizontal: spacing.xl,
     gap: spacing.sm,
   },
   chip: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    paddingVertical: spacing.sm + 2,
     borderRadius: radius.full,
-  },
-  icon: {
-    marginRight: 6,
   },
 });

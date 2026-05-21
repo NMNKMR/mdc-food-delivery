@@ -20,9 +20,10 @@ import CategoriesRow from "./CategoriesRow";
 type Props = {
   scrollY: SharedValue<number>;
   collapseRange: number;
+  onPress?: () => void;
 };
 
-function SearchBlock({ scrollY, collapseRange }: Props) {
+function SearchBlock({ scrollY, collapseRange, onPress }: Props) {
   const { colors, isDarkMode } = useTheme();
 
   // Only animate border-radius — no layout-affecting properties, so the scroll
@@ -54,6 +55,7 @@ function SearchBlock({ scrollY, collapseRange }: Props) {
         ]}
       >
         <Pressable
+          onPress={onPress}
           style={[styles.searchBar, { backgroundColor: colors.surface }]}
         >
           <Ionicons

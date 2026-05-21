@@ -22,6 +22,8 @@ export type AppTabsParamList = {
 export type AppStackParamList = {
   MainTabs: NavigatorScreenParams<AppTabsParamList> | undefined;
   ProfileArea: NavigatorScreenParams<ProfileDrawerParamList> | undefined;
+  RestaurantDetail: { restaurantId: string };
+  Cart: undefined;
 };
 
 export type RootStackParamList = {

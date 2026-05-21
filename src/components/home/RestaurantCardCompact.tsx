@@ -16,13 +16,15 @@ import { Restaurant } from "../../../constants/data";
 type Props = {
   item: Restaurant;
   width: number;
+  onPress?: () => void;
 };
 
-function RestaurantCardCompact({ item, width }: Props) {
+function RestaurantCardCompact({ item, width, onPress }: Props) {
   const { colors } = useTheme();
 
   return (
     <Pressable
+      onPress={onPress}
       style={[styles.card, { width, backgroundColor: colors.surface }]}
     >
       <ImageBackground
