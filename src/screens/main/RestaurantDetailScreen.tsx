@@ -46,8 +46,9 @@ type Props = NativeStackScreenProps<AppStackParamList, "RestaurantDetail">;
 type DetailListItem =
   | { type: "hero" }
   | { type: "info" }
+  | { type: "categoryDivider" }
   | { type: "sectionTitle"; title: string; categoryId: string }
-  | { type: "menuItem"; item: MenuItem };
+  | { type: "menuItem"; item: MenuItem; isLastInCategory: boolean };
 
 // Threshold at which the hero is considered "out of view" — bar bg + status
 // bar style switch over this point. Tuned to roughly hero height (280) minus
@@ -93,15 +94,24 @@ function RestaurantDetailScreen({ route, navigation }: Props) {
       { type: "hero" },
       { type: "info" },
     ];
+    let firstAdded = false;
     menuCategories.forEach((cat) => {
       const catItems = filteredMenu.filter((m) => m.category === cat.id);
       if (catItems.length === 0) return;
+      if (firstAdded) list.push({ type: "categoryDivider" });
+      firstAdded = true;
       list.push({
         type: "sectionTitle",
         title: cat.id === "popular" ? "Popular Items" : cat.name,
         categoryId: cat.id,
       });
-      catItems.forEach((item) => list.push({ type: "menuItem", item }));
+      catItems.forEach((item, idx) =>
+        list.push({
+          type: "menuItem",
+          item,
+          isLastInCategory: idx === catItems.length - 1,
+        }),
+      );
     });
     return list;
   }, [filteredMenu]);
@@ -176,9 +186,10 @@ function RestaurantDetailScreen({ route, navigation }: Props) {
     }
   };
 
-  const keyExtractor = (item: DetailListItem) => {
+  const keyExtractor = (item: DetailListItem, index: number) => {
     if (item.type === "menuItem") return item.item.id;
     if (item.type === "sectionTitle") return `section-${item.categoryId}`;
+    if (item.type === "categoryDivider") return `divider-${index}`;
     return item.type;
   };
 
@@ -188,6 +199,15 @@ function RestaurantDetailScreen({ route, navigation }: Props) {
         return <HeroBlock restaurant={restaurant} />;
       case "info":
         return <InfoCard restaurant={restaurant} />;
+      case "categoryDivider":
+        return (
+          <View
+            style={[
+              styles.categoryDivider,
+              { backgroundColor: colors.surfaceContainerHigh },
+            ]}
+          />
+        );
       case "sectionTitle":
         return (
           <Text
@@ -203,7 +223,10 @@ function RestaurantDetailScreen({ route, navigation }: Props) {
       case "menuItem":
         return (
           <View style={styles.menuItemWrap}>
-            <MenuItemCard item={item.item} />
+            <MenuItemCard
+              item={item.item}
+              showDivider={!item.isLastInCategory}
+            />
           </View>
         );
     }
@@ -259,17 +282,18 @@ function RestaurantDetailScreen({ route, navigation }: Props) {
         setQuery={setQuery}
       />
 
-      <FloatingMenuButton
-        onPress={() => setMenuVisible(true)}
-        hasCart={cartCount > 0}
-      />
-
       <MenuOverlay
         visible={menuVisible}
         onClose={() => setMenuVisible(false)}
         categories={menuCategories}
         activeCategory={currentCategoryId}
         onSelectCategory={scrollToCategory}
+        hasCart={cartCount > 0}
+      />
+
+      <FloatingMenuButton
+        open={menuVisible}
+        onPress={() => setMenuVisible((v) => !v)}
         hasCart={cartCount > 0}
       />
 
@@ -297,5 +321,9 @@ const styles = StyleSheet.create({
   },
   menuItemWrap: {
     paddingHorizontal: spacing.xl,
+  },
+  categoryDivider: {
+    height: 8,
+    marginTop: spacing.xl,
   },
 });

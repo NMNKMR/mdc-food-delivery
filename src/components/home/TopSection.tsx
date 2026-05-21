@@ -1,5 +1,7 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useEffect, useState } from "react";
 import {
+  ImageSourcePropType,
   LayoutChangeEvent,
   Pressable,
   StyleSheet,
@@ -10,17 +12,13 @@ import {
 import { radius, spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
 import { useTheme } from "../../../context/theme";
+import FloatingHero from "./SlidingHero";
 
-type Props = {
-  onLayout?: (e: LayoutChangeEvent) => void;
-};
-
-function TopSection({ onLayout }: Props) {
+function TopSection() {
   const { colors, isDarkMode } = useTheme();
 
   return (
     <View
-      onLayout={onLayout}
       style={[
         styles.wrap,
         {
@@ -71,19 +69,21 @@ function TopSection({ onLayout }: Props) {
         </Pressable>
       </View>
 
-      <Text
-        style={[
-          typography.headlineLg as TextStyle,
-          styles.heading,
-          { color: colors.white },
-        ]}
-      >
-        Choose your next{"\n"}healthy meal !
-      </Text>
+      <View style={styles.headingRow}>
+        <Text
+          style={[
+            typography.headlineLg as TextStyle,
+            styles.heading,
+            { color: colors.white },
+          ]}
+        >
+          Find your next{"\n"}healthy meal !
+        </Text>
+        <FloatingHero />
+      </View>
     </View>
   );
 }
-
 export default TopSection;
 
 const styles = StyleSheet.create({
@@ -118,7 +118,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  heading: {
+  headingRow: {
     marginTop: spacing.lg,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  heading: {
+    flex: 1,
+    paddingRight: spacing.sm,
   },
 });

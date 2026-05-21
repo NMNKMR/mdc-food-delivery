@@ -7,10 +7,7 @@ import {
   View,
 } from "react-native";
 import Animated, {
-  Extrapolation,
-  interpolate,
   SharedValue,
-  useAnimatedStyle,
 } from "react-native-reanimated";
 import { radius, spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
@@ -18,30 +15,11 @@ import { useTheme } from "../../../context/theme";
 import CategoriesRow from "./CategoriesRow";
 
 type Props = {
-  scrollY: SharedValue<number>;
-  collapseRange: number;
   onPress?: () => void;
 };
 
-function SearchBlock({ scrollY, collapseRange, onPress }: Props) {
+function SearchBlock({ onPress }: Props) {
   const { colors, isDarkMode } = useTheme();
-
-  // Only animate border-radius — no layout-affecting properties, so the scroll
-  // stays smooth. The radius melts away exactly as the top section finishes
-  // scrolling off, so by the time this block sticks the corners are flat.
-  const greenStyle = useAnimatedStyle(() => {
-    const range = Math.max(collapseRange, 1);
-    const r = interpolate(
-      scrollY.value,
-      [0, range],
-      [36, 0],
-      Extrapolation.CLAMP,
-    );
-    return {
-      borderBottomLeftRadius: r,
-      borderBottomRightRadius: r,
-    };
-  });
 
   return (
     <View>
@@ -51,7 +29,6 @@ function SearchBlock({ scrollY, collapseRange, onPress }: Props) {
           {
             backgroundColor: isDarkMode ? colors.primaryDark : colors.primary,
           },
-          greenStyle,
         ]}
       >
         <Pressable

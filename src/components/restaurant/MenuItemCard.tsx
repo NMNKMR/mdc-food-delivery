@@ -7,7 +7,8 @@ import {
   TextStyle,
   View,
 } from "react-native";
-import { MenuItem } from "../../../constants/data";
+import { MenuItem, VegType } from "../../../constants/data";
+import { lightColors } from "../../../constants/colors";
 import { radius, spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
 import { useTheme } from "../../../context/theme";
@@ -15,9 +16,10 @@ import { useCartStore } from "../../../store/cartStore";
 
 type Props = {
   item: MenuItem;
+  showDivider?: boolean;
 };
 
-function MenuItemCard({ item }: Props) {
+function MenuItemCard({ item, showDivider = true }: Props) {
   const { colors } = useTheme();
   const quantity = useCartStore(
     (s) => s.lines.find((l) => l.itemId === item.id)?.quantity ?? 0,
@@ -34,97 +36,128 @@ function MenuItemCard({ item }: Props) {
     });
 
   return (
-    <View style={[styles.card, { backgroundColor: colors.surface }]}>
-      <View style={styles.content}>
-        <Text
-          style={[
-            typography.labelLg as TextStyle,
-            { color: colors.textPrimary, fontSize: 15 },
-          ]}
-          numberOfLines={1}
-        >
-          {item.name}
-        </Text>
-        <Text
-          style={[
-            typography.bodyMd as TextStyle,
-            styles.desc,
-            { color: colors.textSecondary },
-          ]}
-          numberOfLines={2}
-        >
-          {item.description}
-        </Text>
-        <Text
-          style={[
-            typography.labelLg as TextStyle,
-            styles.price,
-            { color: colors.primary, fontSize: 16 },
-          ]}
-        >
-          ₹{item.price.toFixed(0)}
-        </Text>
-      </View>
-
-      <View style={styles.imageWrap}>
-        <Image source={item.image} style={styles.image} resizeMode="cover" />
-      </View>
-
-      {quantity === 0 ? (
-        <Pressable
-          onPress={handleAdd}
-          style={({ pressed }) => [
-            styles.cornerBtn,
-            styles.addBtn,
-            {
-              backgroundColor: colors.primary,
-              opacity: pressed ? 0.85 : 1,
-            },
-          ]}
-        >
+    <View style={styles.wrap}>
+      <View style={styles.row}>
+        <View style={styles.content}>
+          <VegBadge type={item.vegType} />
           <Text
             style={[
               typography.labelLg as TextStyle,
-              { color: colors.onPrimary, fontSize: 14 },
+              styles.name,
+              { color: colors.textPrimary },
             ]}
+            numberOfLines={2}
           >
-            Add
+            {item.name}
           </Text>
-        </Pressable>
-      ) : (
-        <View
-          style={[
-            styles.cornerBtn,
-            styles.qtyChip,
-            { backgroundColor: colors.primary },
-          ]}
-        >
-          <Pressable
-            onPress={() => decrement(item.id)}
-            hitSlop={6}
-            style={styles.qtyBtn}
-            accessibilityLabel="Decrease quantity"
+          <Text
+            style={[
+              typography.bodyMd as TextStyle,
+              styles.desc,
+              { color: colors.textSecondary },
+            ]}
+            numberOfLines={2}
           >
-            <Ionicons name="remove" size={16} color={colors.onPrimary} />
-          </Pressable>
+            {item.description}
+          </Text>
           <Text
             style={[
               typography.labelLg as TextStyle,
-              styles.qtyText,
-              { color: colors.onPrimary },
+              styles.price,
+              { color: colors.textPrimary },
             ]}
           >
-            {quantity}
+            ₹{item.price.toFixed(0)}
           </Text>
-          <Pressable
-            onPress={handleAdd}
-            hitSlop={6}
-            style={styles.qtyBtn}
-            accessibilityLabel="Increase quantity"
-          >
-            <Ionicons name="add" size={16} color={colors.onPrimary} />
-          </Pressable>
         </View>
+
+        <View style={styles.imageCol}>
+          <Image source={item.image} style={styles.image} resizeMode="cover" />
+          <View style={styles.actionWrap}>
+            {quantity === 0 ? (
+              <Pressable
+                onPress={handleAdd}
+                style={({ pressed }) => [
+                  styles.addBtn,
+                  {
+                    backgroundColor: colors.surface,
+                    borderColor: colors.primary,
+                    opacity: pressed ? 0.85 : 1,
+                  },
+                ]}
+              >
+                <Text
+                  style={[
+                    typography.labelLg as TextStyle,
+                    styles.addText,
+                    { color: colors.primary },
+                  ]}
+                >
+                  ADD
+                </Text>
+              </Pressable>
+            ) : (
+              <View
+                style={[
+                  styles.stepper,
+                  {
+                    backgroundColor: colors.surface,
+                    borderColor: colors.primary,
+                  },
+                ]}
+              >
+                <Pressable
+                  onPress={() => decrement(item.id)}
+                  hitSlop={8}
+                  style={styles.stepBtn}
+                  accessibilityLabel="Decrease quantity"
+                >
+                  <Ionicons name="remove" size={16} color={colors.primary} />
+                </Pressable>
+                <Text
+                  style={[
+                    typography.labelLg as TextStyle,
+                    styles.stepCount,
+                    { color: colors.primary },
+                  ]}
+                >
+                  {quantity}
+                </Text>
+                <Pressable
+                  onPress={handleAdd}
+                  hitSlop={8}
+                  style={styles.stepBtn}
+                  accessibilityLabel="Increase quantity"
+                >
+                  <Ionicons name="add" size={16} color={colors.primary} />
+                </Pressable>
+              </View>
+            )}
+          </View>
+        </View>
+      </View>
+
+      {showDivider ? (
+        <View style={[styles.divider, { borderColor: colors.borderSubtle }]} />
+      ) : null}
+    </View>
+  );
+}
+
+function VegBadge({ type }: { type: VegType }) {
+  const color =
+    type === "veg"
+      ? lightColors.vegIndicator
+      : type === "non-veg"
+        ? lightColors.nonVegIndicator
+        : lightColors.eggIndicator;
+
+  return (
+    <View style={[styles.vegBadge, { borderColor: color }]}>
+      {type === "non-veg" ? (
+        <View style={[styles.vegTriangle, { borderBottomColor: color }]} />
+      ) : (
+        <View style={[styles.vegDot, { backgroundColor: color }]} />
       )}
     </View>
   );
@@ -132,68 +165,119 @@ function MenuItemCard({ item }: Props) {
 
 export default MenuItemCard;
 
+const IMAGE_SIZE = 128;
+
 const styles = StyleSheet.create({
-  card: {
+  wrap: {
+    paddingTop: spacing.lg,
+  },
+  row: {
     flexDirection: "row",
-    borderRadius: radius.lg,
-    overflow: "hidden",
-    marginBottom: spacing.md,
-    elevation: 1,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    minHeight: 124,
+    alignItems: "flex-start",
   },
   content: {
     flex: 1,
-    padding: spacing.lg,
-    paddingBottom: spacing.xxl,
+    paddingRight: spacing.md,
+  },
+  name: {
+    marginTop: spacing.sm,
+    fontSize: 16,
+    fontWeight: "600",
   },
   desc: {
     marginTop: 4,
   },
   price: {
     marginTop: spacing.sm,
+    fontSize: 16,
+    fontWeight: "700",
   },
-  imageWrap: {
-    width: 100,
-    height: 100,
-    margin: spacing.md,
-    borderRadius: radius.md,
-    overflow: "hidden",
-    alignSelf: "center",
+  imageCol: {
+    width: IMAGE_SIZE,
+    alignItems: "center",
+    paddingBottom: 16,
   },
   image: {
-    width: "100%",
-    height: "100%",
+    width: IMAGE_SIZE,
+    height: IMAGE_SIZE,
+    borderRadius: radius.lg,
   },
-  cornerBtn: {
+  actionWrap: {
     position: "absolute",
     bottom: 0,
-    right: 0,
-    borderTopLeftRadius: radius.lg,
+    alignSelf: "center",
   },
   addBtn: {
+    minWidth: 96,
     paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.sm,
+    height: 36,
+    borderRadius: radius.md,
+    borderWidth: 1.5,
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  qtyChip: {
+  addText: {
+    fontSize: 14,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+  },
+  stepper: {
     flexDirection: "row",
     alignItems: "center",
+    minWidth: 96,
+    height: 36,
+    borderRadius: radius.md,
+    borderWidth: 1.5,
     paddingHorizontal: spacing.xs,
-    paddingVertical: 2,
+    justifyContent: "space-between",
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
   },
-  qtyBtn: {
-    width: 30,
-    height: 30,
+  stepBtn: {
+    width: 28,
+    height: 28,
     alignItems: "center",
     justifyContent: "center",
   },
-  qtyText: {
-    minWidth: 20,
+  stepCount: {
+    minWidth: 18,
     textAlign: "center",
     fontSize: 14,
-    fontWeight: "600",
+    fontWeight: "700",
+  },
+  divider: {
+    marginTop: spacing.lg,
+    borderBottomWidth: 1,
+    borderStyle: "dashed",
+  },
+  vegBadge: {
+    width: 16,
+    height: 16,
+    borderWidth: 1.5,
+    borderRadius: 3,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  vegDot: {
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+  },
+  vegTriangle: {
+    width: 0,
+    height: 0,
+    borderLeftWidth: 4,
+    borderRightWidth: 4,
+    borderBottomWidth: 7,
+    borderLeftColor: "transparent",
+    borderRightColor: "transparent",
   },
 });

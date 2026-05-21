@@ -169,6 +169,8 @@ export type MenuCategory = {
   name: string;
 };
 
+export type VegType = "veg" | "non-veg" | "egg";
+
 export type MenuItem = {
   id: string;
   name: string;
@@ -176,6 +178,7 @@ export type MenuItem = {
   price: number;
   image: ImageSourcePropType;
   category: string;
+  vegType: VegType;
 };
 
 export const menuCategories: MenuCategory[] = [
@@ -257,6 +260,7 @@ export const menu: MenuItem[] = [
     price: 399,
     image: require("../assets/images/items/menu-item1-resize.png"),
     category: "popular",
+    vegType: "veg",
   },
   {
     id: "m2",
@@ -266,6 +270,7 @@ export const menu: MenuItem[] = [
     price: 549,
     image: require("../assets/images/items/menu-item2-resize.png"),
     category: "popular",
+    vegType: "non-veg",
   },
   {
     id: "m3",
@@ -275,6 +280,7 @@ export const menu: MenuItem[] = [
     price: 319,
     image: require("../assets/images/items/menu-item3-resize.png"),
     category: "popular",
+    vegType: "veg",
   },
   {
     id: "m4",
@@ -284,6 +290,7 @@ export const menu: MenuItem[] = [
     price: 449,
     image: require("../assets/images/items/menu-item4-resize.png"),
     category: "popular",
+    vegType: "veg",
   },
   {
     id: "m5",
@@ -293,6 +300,7 @@ export const menu: MenuItem[] = [
     price: 459,
     image: require("../assets/images/items/menu-item5-resize.png"),
     category: "bowls",
+    vegType: "veg",
   },
   {
     id: "m6",
@@ -302,6 +310,7 @@ export const menu: MenuItem[] = [
     price: 399,
     image: require("../assets/images/items/menu-item6-resize.png"),
     category: "bowls",
+    vegType: "veg",
   },
   {
     id: "m7",
@@ -311,6 +320,7 @@ export const menu: MenuItem[] = [
     price: 429,
     image: require("../assets/images/items/menu-item7-resize.png"),
     category: "bowls",
+    vegType: "veg",
   },
   {
     id: "m8",
@@ -320,6 +330,7 @@ export const menu: MenuItem[] = [
     price: 349,
     image: require("../assets/images/items/menu-item8-resize.png"),
     category: "salads",
+    vegType: "veg",
   },
   {
     id: "m9",
@@ -329,6 +340,7 @@ export const menu: MenuItem[] = [
     price: 329,
     image: require("../assets/images/items/menu-item9-resize.png"),
     category: "salads",
+    vegType: "veg",
   },
   {
     id: "m10",
@@ -338,6 +350,7 @@ export const menu: MenuItem[] = [
     price: 279,
     image: require("../assets/images/items/menu-item10-resize.png"),
     category: "wraps",
+    vegType: "veg",
   },
   {
     id: "m11",
@@ -346,6 +359,7 @@ export const menu: MenuItem[] = [
     price: 249,
     image: require("../assets/images/items/menu-item11-resize.png"),
     category: "smoothies",
+    vegType: "veg",
   },
   {
     id: "m12",
@@ -354,5 +368,6 @@ export const menu: MenuItem[] = [
     price: 269,
     image: require("../assets/images/items/menu-item12-resize.png"),
     category: "smoothies",
+    vegType: "veg",
   },
 ];

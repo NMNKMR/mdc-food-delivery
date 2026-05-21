@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { LinearGradient } from "expo-linear-gradient";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   Dimensions,
   FlatList,
@@ -11,10 +11,7 @@ import {
   TextStyle,
   View,
 } from "react-native";
-import Animated, {
-  useAnimatedScrollHandler,
-  useSharedValue,
-} from "react-native-reanimated";
+import Animated from "react-native-reanimated";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
@@ -46,19 +43,11 @@ function HomeScreen() {
   const { top, bottom } = useSafeAreaInsets();
   const navigation =
     useNavigation<NativeStackNavigationProp<AppStackParamList>>();
-  const scrollY = useSharedValue(0);
-  const [topHeight, setTopHeight] = useState(0);
 
   const headerGreen = isDarkMode ? colors.primaryDark : colors.primary;
 
   const openRestaurant = (id: string) =>
     navigation.navigate("RestaurantDetail", { restaurantId: id });
-
-  const scrollHandler = useAnimatedScrollHandler({
-    onScroll: (e) => {
-      scrollY.value = e.contentOffset.y;
-    },
-  });
 
   const topRatedPairs = useMemo(() => {
     const pairs: [Restaurant, Restaurant?][] = [];
@@ -87,19 +76,11 @@ function HomeScreen() {
   const renderItem: ListRenderItem<HomeListItem> = ({ item }) => {
     switch (item.type) {
       case "top":
-        return (
-          <TopSection
-            onLayout={(e) => setTopHeight(e.nativeEvent.layout.height)}
-          />
-        );
+        return <TopSection />;
 
       case "searchAndCategories":
         return (
-          <SearchBlock
-            scrollY={scrollY}
-            collapseRange={topHeight || 200}
-            onPress={() => navigation.navigate("Search" as never)}
-          />
+          <SearchBlock onPress={() => navigation.navigate("Search" as never)} />
         );
 
       case "topRated":
@@ -174,7 +155,6 @@ function HomeScreen() {
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           stickyHeaderIndices={[1]}
-          onScroll={scrollHandler}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.listContent}
@@ -202,7 +182,7 @@ const styles = StyleSheet.create({
     marginHorizontal: spacing.xl,
     marginBottom: spacing.xs,
     fontStyle: "italic",
-    fontSize: 16
+    fontSize: 16,
   },
   featuredTitle: {
     marginTop: spacing.lg,

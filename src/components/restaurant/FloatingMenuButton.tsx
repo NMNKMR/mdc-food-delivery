@@ -8,40 +8,41 @@ import { useTheme } from "../../../context/theme";
 type Props = {
   onPress: () => void;
   hasCart: boolean;
+  open: boolean;
 };
 
-function FloatingMenuButton({ onPress, hasCart }: Props) {
+function FloatingMenuButton({ onPress, hasCart, open }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
   return (
     <Pressable
       onPress={onPress}
-      accessibilityLabel="Open menu"
+      accessibilityLabel={open ? "Close menu" : "Open menu"}
       accessibilityRole="button"
       style={({ pressed }) => [
         styles.btn,
         {
           right: spacing.xl,
           bottom: insets.bottom + (hasCart ? 88 : 24),
-          backgroundColor: colors.buttonSecondary,
+          backgroundColor: open ? colors.primary : colors.buttonSecondary,
           opacity: pressed ? 0.92 : 1,
         },
       ]}
     >
       <Ionicons
-        name="restaurant-outline"
+        name={open ? "close" : "restaurant-outline"}
         size={18}
-        color={colors.buttonTextSecondary}
+        color={open ? colors.onPrimary : colors.buttonTextSecondary}
       />
       <Text
         style={[
           typography.labelLg as TextStyle,
           styles.label,
-          { color: colors.buttonTextSecondary },
+          { color: open ? colors.onPrimary : colors.buttonTextSecondary },
         ]}
       >
-        Menu
+        {open ? "Close" : "Menu"}
       </Text>
     </Pressable>
   );

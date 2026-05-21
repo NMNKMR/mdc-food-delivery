@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import {
-  Modal,
   Pressable,
   StyleSheet,
   Text,
@@ -36,8 +35,6 @@ function MenuOverlay({
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
-  // Item counts derived once from the full menu — popover doesn't filter
-  // by search query, it's purely a navigation aid.
   const counts = useMemo(() => {
     const map: Record<string, number> = {};
     menu.forEach((m) => {
@@ -46,12 +43,13 @@ function MenuOverlay({
     return map;
   }, []);
 
+  if (!visible) return null;
+
   const handlePick = (id: string) => {
     onSelectCategory(id);
     onClose();
   };
 
-  // Pin the popover bottom edge just above the FloatingMenuButton's top edge.
   const popoverBottom =
     insets.bottom +
     (hasCart ? 88 : 24) +
@@ -59,84 +57,77 @@ function MenuOverlay({
     GAP_ABOVE_BUTTON;
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="fade"
-      onRequestClose={onClose}
-      statusBarTranslucent
-    >
-      <Pressable style={styles.backdrop} onPress={onClose}>
-        <Pressable
-          onPress={(e) => e.stopPropagation()}
-          style={[
-            styles.box,
-            {
-              right: spacing.xl,
-              bottom: popoverBottom,
-              backgroundColor: colors.surface,
-            },
-          ]}
-        >
-          {categories.map((cat) => {
-            const isActive = cat.id === activeCategory;
-            const count = counts[cat.id] ?? 0;
-            const label =
-              cat.id === "popular" ? "Popular Items" : cat.name;
-            return (
-              <Pressable
-                key={cat.id}
-                onPress={() => handlePick(cat.id)}
-                style={({ pressed }) => [
-                  styles.row,
-                  isActive && { backgroundColor: colors.primaryMuted },
-                  pressed && !isActive && { backgroundColor: colors.pressed },
+    <>
+      <Pressable
+        style={[styles.backdrop, { backgroundColor: colors.scrim }]}
+        onPress={onClose}
+      />
+      <View
+        style={[
+          styles.box,
+          {
+            right: spacing.xl,
+            bottom: popoverBottom,
+            backgroundColor: colors.surface,
+          },
+        ]}
+      >
+        {categories.map((cat) => {
+          const isActive = cat.id === activeCategory;
+          const count = counts[cat.id] ?? 0;
+          const label = cat.id === "popular" ? "Popular Items" : cat.name;
+          return (
+            <Pressable
+              key={cat.id}
+              onPress={() => handlePick(cat.id)}
+              style={({ pressed }) => [
+                styles.row,
+                pressed && !isActive && { backgroundColor: colors.pressed },
+              ]}
+            >
+              <Text
+                style={[
+                  typography.labelLg as TextStyle,
+                  styles.name,
+                  {
+                    color: isActive ? colors.primary : colors.textPrimary,
+                    fontWeight: isActive ? "700" : "500",
+                    fontSize: 15,
+                  },
+                ]}
+                numberOfLines={1}
+              >
+                {label}
+              </Text>
+              <View
+                style={[
+                  styles.countChip,
+                  {
+                    backgroundColor: isActive
+                      ? colors.primary
+                      : colors.surfaceContainer,
+                  },
                 ]}
               >
                 <Text
                   style={[
-                    typography.labelLg as TextStyle,
-                    styles.name,
+                    typography.labelMd as TextStyle,
                     {
-                      color: isActive ? colors.primary : colors.textPrimary,
-                      fontWeight: isActive ? "700" : "500",
-                      fontSize: 15,
+                      color: isActive
+                        ? colors.onPrimary
+                        : colors.textSecondary,
+                      fontSize: 12,
                     },
                   ]}
-                  numberOfLines={1}
                 >
-                  {label}
+                  {count}
                 </Text>
-                <View
-                  style={[
-                    styles.countChip,
-                    {
-                      backgroundColor: isActive
-                        ? colors.primary
-                        : colors.surfaceContainer,
-                    },
-                  ]}
-                >
-                  <Text
-                    style={[
-                      typography.labelMd as TextStyle,
-                      {
-                        color: isActive
-                          ? colors.onPrimary
-                          : colors.textSecondary,
-                        fontSize: 12,
-                      },
-                    ]}
-                  >
-                    {count}
-                  </Text>
-                </View>
-              </Pressable>
-            );
-          })}
-        </Pressable>
-      </Pressable>
-    </Modal>
+              </View>
+            </Pressable>
+          );
+        })}
+      </View>
+    </>
   );
 }
 
@@ -144,8 +135,11 @@ export default MenuOverlay;
 
 const styles = StyleSheet.create({
   backdrop: {
-    flex: 1,
-    backgroundColor: "rgba(0,0,0,0.35)",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
   box: {
     position: "absolute",
