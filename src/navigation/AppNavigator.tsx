@@ -1,4 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useTheme } from "../../context/theme";
 import CartScreen from "../screens/main/CartScreen";
 import RestaurantDetailScreen from "../screens/main/RestaurantDetailScreen";
 import { ProfileNavigator } from "./ProfileNavigator";
@@ -8,6 +9,8 @@ import { AppStackParamList } from "./types";
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
 export function AppNavigator() {
+  const { colors } = useTheme();
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,6 +22,7 @@ export function AppNavigator() {
       <Stack.Screen name="ProfileArea" component={ProfileNavigator} />
       <Stack.Screen
         name="RestaurantDetail"
+        options={{ animation: "fade_from_bottom" }}
         component={RestaurantDetailScreen}
       />
       <Stack.Screen name="Cart" component={CartScreen} />
