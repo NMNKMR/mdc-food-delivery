@@ -1,8 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import {
+  ImageBackground,
   KeyboardAvoidingView,
-  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -11,23 +11,24 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { lightColors } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
-import { useTheme } from "../../../context/theme";
 import { useAuthStore } from "../../../store/authStore";
+import Brand from "../../components/shared/Brand";
 import Button from "../../components/ui/Button";
 import TextField from "../../components/ui/TextField";
+import { useStatusBarStyle } from "../../hooks/useStatusBarStyle";
 import { AuthStackParamList } from "../../navigation/types";
 import { isPhone, isStrongPassword } from "../../utils/validation";
-import Brand from "../../components/shared/Brand";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "SignIn">;
 
 type Errors = Partial<{ phone: string; password: string }>;
 
 function SignInScreen({ navigation }: Props) {
-  const { colors, isDarkMode } = useTheme();
   const insets = useSafeAreaInsets();
+  useStatusBarStyle("dark");
   const signIn = useAuthStore((s) => s.signIn);
 
   const [phone, setPhone] = useState("");
@@ -52,144 +53,140 @@ function SignInScreen({ navigation }: Props) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.flex, { backgroundColor: colors.background }]}
-      behavior={"padding"}
+    <ImageBackground
+      source={require("../../../assets/images/auth-bg.png")}
+      resizeMode="cover"
+      style={styles.bg}
     >
-      <ScrollView
-        contentContainerStyle={[
-          styles.content,
-          {
-            paddingTop: insets.top + spacing.sm,
-            paddingBottom: insets.bottom + spacing.xxl,
-          },
-        ]}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <Brand containerStyle={{paddingVertical: 44}} />
-
-        <Text
-          style={[
-            typography.headlineLg as TextStyle,
-            styles.title,
-            { color: colors.textPrimary },
+      <KeyboardAvoidingView style={styles.flex} behavior="padding">
+        <ScrollView
+          contentContainerStyle={[
+            styles.content,
+            {
+              paddingTop: insets.top + spacing.xxxl,
+              paddingBottom: insets.bottom + spacing.xxl,
+            },
           ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          Welcome back
-        </Text>
-        <Text
-          style={[
-            typography.bodyLg as TextStyle,
-            styles.subtitle,
-            { color: colors.textSecondary },
-          ]}
-        >
-          Sign in to continue ordering.
-        </Text>
+          <Brand />
 
-        <TextField
-          label="Phone number"
-          placeholder="+91 90000 00000"
-          keyboardType="phone-pad"
-          autoComplete="tel"
-          textContentType="telephoneNumber"
-          leftIcon="call-outline"
-          value={phone}
-          onChangeText={setPhone}
-          error={errors.phone}
-        />
-
-        <TextField
-          label="Password"
-          placeholder="Your password"
-          secureTextEntry={!showPassword}
-          autoCapitalize="none"
-          autoComplete="password"
-          textContentType="password"
-          leftIcon="lock-closed-outline"
-          rightIcon={showPassword ? "eye-off-outline" : "eye-outline"}
-          onRightIconPress={() => setShowPassword((v) => !v)}
-          value={password}
-          onChangeText={setPassword}
-          error={errors.password}
-          containerStyle={styles.field}
-        />
-
-        <View style={styles.forgotRow}>
-          <Pressable hitSlop={8}>
-            <Text
-              style={[
-                typography.labelMd as TextStyle,
-                { color: colors.primary },
-              ]}
-            >
-              Forgot Password?
-            </Text>
-          </Pressable>
-        </View>
-
-        <Button
-          label="Sign In"
-          loading={submitting}
-          onPress={onSubmit}
-          style={styles.cta}
-        />
-
-        <View style={styles.footer}>
-          <Text
-            style={[
-              typography.bodyMd as TextStyle,
-              { color: colors.textSecondary },
-            ]}
-          >
-            Don't have an account?{" "}
+          <Text style={[typography.headlineLg as TextStyle, styles.title]}>
+            Welcome Back!
           </Text>
-          <Pressable onPress={() => navigation.navigate("SignUp")} hitSlop={8}>
-            <Text
-              style={[
-                typography.labelLg as TextStyle,
-                { color: colors.primary },
-              ]}
-            >
-              Create account
+          <Text style={[typography.bodyLg as TextStyle, styles.subtitle]}>
+            Sign in to continue your healthy journey.
+          </Text>
+
+          <View style={styles.form}>
+            <TextField
+              placeholder="Phone number"
+              keyboardType="phone-pad"
+              autoComplete="tel"
+              textContentType="telephoneNumber"
+              leftIcon="call"
+              value={phone}
+              onChangeText={setPhone}
+              error={errors.phone}
+            />
+
+            <TextField
+              placeholder="Password"
+              secureTextEntry={!showPassword}
+              autoCapitalize="none"
+              autoComplete="password"
+              textContentType="password"
+              leftIcon="lock-closed"
+              rightIcon={showPassword ? "eye-off-outline" : "eye-outline"}
+              onRightIconPress={() => setShowPassword((v) => !v)}
+              value={password}
+              onChangeText={setPassword}
+              error={errors.password}
+              containerStyle={styles.field}
+            />
+
+            <Pressable hitSlop={8} style={styles.forgot}>
+              <Text style={[typography.labelLg as TextStyle, styles.link]}>
+                Forgot Password?
+              </Text>
+            </Pressable>
+
+            <Button
+              label="Sign In"
+              loading={submitting}
+              onPress={onSubmit}
+              style={[styles.cta, { backgroundColor: lightColors.buttonPrimary }]}
+              textStyle={{ color: lightColors.buttonText }}
+            />
+          </View>
+
+          <View style={styles.spacer} />
+
+          <View style={styles.footer}>
+            <Text style={[typography.bodyMd as TextStyle, styles.footerText]}>
+              Don't have an account?{" "}
             </Text>
-          </Pressable>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <Pressable
+              onPress={() => navigation.navigate("SignUp")}
+              hitSlop={8}
+            >
+              <Text style={[typography.labelLg as TextStyle, styles.link]}>
+                Sign Up
+              </Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 }
 
 export default SignInScreen;
 
 const styles = StyleSheet.create({
+  bg: { flex: 1 },
   flex: { flex: 1 },
   content: {
-    paddingHorizontal: spacing.xl,
+    flexGrow: 1,
+    paddingHorizontal: spacing.xxl,
   },
   title: {
-    marginBottom: spacing.xs,
+    marginTop: spacing.xxl,
     textAlign: "center",
+    color: lightColors.primaryDark,
+    fontWeight: "800",
   },
   subtitle: {
-    marginBottom: spacing.xxxl,
+    marginTop: spacing.xs,
     textAlign: "center",
+    color: lightColors.textSecondary,
+  },
+  form: {
+    marginTop: spacing.xxl,
   },
   field: {
     marginTop: spacing.lg,
   },
-  forgotRow: {
-    alignItems: "flex-end",
+  forgot: {
+    alignSelf: "flex-end",
     marginTop: spacing.md,
   },
+  link: {
+    color: lightColors.primary,
+  },
   cta: {
-    marginTop: spacing.xxl,
+    marginTop: spacing.xl,
+  },
+  spacer: {
+    minHeight: spacing.xxl,
   },
   footer: {
-    marginTop: spacing.xl,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  footerText: {
+    color: lightColors.textSecondary,
   },
 });

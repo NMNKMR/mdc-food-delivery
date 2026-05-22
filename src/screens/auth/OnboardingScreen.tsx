@@ -37,10 +37,10 @@ function OnboardingScreen({ navigation }: Props) {
             },
           ]}
         >
-          <Brand />
+          <Brand hideLogo />
           <Button
             label="Get Started"
-            onPress={() => navigation.navigate("SignUp")}
+            onPress={() => navigation.replace("SignUp")}
             style={[styles.cta, { backgroundColor: lightColors.buttonPrimary }]}
             textStyle={{ color: lightColors.buttonText }}
           />
@@ -55,7 +55,7 @@ function OnboardingScreen({ navigation }: Props) {
               Already have an account?{" "}
             </Text>
             <Pressable
-              onPress={() => navigation.navigate("SignIn")}
+              onPress={() => navigation.replace("SignIn")}
               hitSlop={8}
             >
               <Text

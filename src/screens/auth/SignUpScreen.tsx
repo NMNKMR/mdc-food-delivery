@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import {
+  ImageBackground,
   KeyboardAvoidingView,
   Pressable,
   ScrollView,
@@ -10,15 +11,16 @@ import {
   View,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { lightColors } from "../../../constants/colors";
 import { spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
-import { useTheme } from "../../../context/theme";
 import { useAuthStore } from "../../../store/authStore";
+import Brand from "../../components/shared/Brand";
 import Button from "../../components/ui/Button";
 import TextField from "../../components/ui/TextField";
+import { useStatusBarStyle } from "../../hooks/useStatusBarStyle";
 import { AuthStackParamList } from "../../navigation/types";
 import { isNonEmpty, isPhone, isStrongPassword } from "../../utils/validation";
-import Brand from "../../components/shared/Brand";
 
 type Props = NativeStackScreenProps<AuthStackParamList, "SignUp">;
 
@@ -30,8 +32,8 @@ type Errors = Partial<{
 }>;
 
 function SignUpScreen({ navigation }: Props) {
-  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
+  useStatusBarStyle("dark");
   const signUp = useAuthStore((s) => s.signUp);
 
   const [firstName, setFirstName] = useState("");
@@ -66,144 +68,139 @@ function SignUpScreen({ navigation }: Props) {
   };
 
   return (
-    <KeyboardAvoidingView
-      style={[styles.flex, { backgroundColor: colors.background }]}
-      behavior={"padding"}
+    <ImageBackground
+      source={require("../../../assets/images/auth-bg.png")}
+      resizeMode="cover"
+      style={styles.bg}
     >
-      <ScrollView
-        contentContainerStyle={[
-          styles.content,
-          {
-            paddingTop: insets.top + spacing.sm,
-            paddingBottom: insets.bottom + spacing.xxl,
-          },
-        ]}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <Brand containerStyle={{ paddingVertical: 44 }} />
-
-        <Text
-          style={[
-            typography.headlineLg as TextStyle,
-            styles.title,
-            { color: colors.textPrimary },
+      <KeyboardAvoidingView style={styles.flex} behavior="padding">
+        <ScrollView
+          contentContainerStyle={[
+            styles.content,
+            {
+              paddingTop: insets.top + spacing.xxl,
+              paddingBottom: insets.bottom + spacing.xxl,
+            },
           ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
         >
-          Create account
-        </Text>
-        <Text
-          style={[
-            typography.bodyLg as TextStyle,
-            styles.subtitle,
-            { color: colors.textSecondary },
-          ]}
-        >
-          Start ordering your healthy meals.
-        </Text>
+          <Brand />
 
-        <View style={styles.row}>
-          <View style={styles.half}>
-            <TextField
-              label="First name"
-              placeholder="Jane"
-              autoCapitalize="words"
-              autoComplete="given-name"
-              textContentType="givenName"
-              value={firstName}
-              onChangeText={setFirstName}
-              error={errors.firstName}
-            />
-          </View>
-          <View style={styles.half}>
-            <TextField
-              label="Last name"
-              placeholder="Doe"
-              autoCapitalize="words"
-              autoComplete="family-name"
-              textContentType="familyName"
-              value={lastName}
-              onChangeText={setLastName}
-              error={errors.lastName}
-            />
-          </View>
-        </View>
-
-        <TextField
-          label="Phone number"
-          placeholder="+91 90000 00000"
-          keyboardType="phone-pad"
-          autoComplete="tel"
-          textContentType="telephoneNumber"
-          leftIcon="call-outline"
-          value={phone}
-          onChangeText={setPhone}
-          error={errors.phone}
-          containerStyle={styles.field}
-        />
-
-        <TextField
-          label="Password"
-          placeholder="At least 8 characters"
-          secureTextEntry={!showPassword}
-          autoCapitalize="none"
-          autoComplete="new-password"
-          textContentType="newPassword"
-          leftIcon="lock-closed-outline"
-          rightIcon={showPassword ? "eye-off-outline" : "eye-outline"}
-          onRightIconPress={() => setShowPassword((v) => !v)}
-          value={password}
-          onChangeText={setPassword}
-          error={errors.password}
-          containerStyle={styles.field}
-        />
-
-        <Button
-          label="Create account"
-          loading={submitting}
-          onPress={onSubmit}
-          style={styles.cta}
-        />
-
-        <View style={styles.footer}>
-          <Text
-            style={[
-              typography.bodyMd as TextStyle,
-              { color: colors.textSecondary },
-            ]}
-          >
-            Already have an account?{" "}
+          <Text style={[typography.headlineLg as TextStyle, styles.title]}>
+            Create Account
           </Text>
-          <Pressable onPress={() => navigation.navigate("SignIn")} hitSlop={8}>
-            <Text
-              style={[
-                typography.labelLg as TextStyle,
-                { color: colors.primary },
-              ]}
-            >
-              Sign In
+          <Text style={[typography.bodyLg as TextStyle, styles.subtitle]}>
+            Start ordering your healthy meals.
+          </Text>
+
+          <View style={styles.form}>
+            <View style={styles.row}>
+              <View style={styles.half}>
+                <TextField
+                  placeholder="First name"
+                  autoCapitalize="words"
+                  autoComplete="given-name"
+                  textContentType="givenName"
+                  leftIcon="person"
+                  value={firstName}
+                  onChangeText={setFirstName}
+                  error={errors.firstName}
+                />
+              </View>
+              <View style={styles.half}>
+                <TextField
+                  placeholder="Last name"
+                  autoCapitalize="words"
+                  autoComplete="family-name"
+                  textContentType="familyName"
+                  leftIcon="person"
+                  value={lastName}
+                  onChangeText={setLastName}
+                  error={errors.lastName}
+                />
+              </View>
+            </View>
+
+            <TextField
+              placeholder="Phone number"
+              keyboardType="phone-pad"
+              autoComplete="tel"
+              textContentType="telephoneNumber"
+              leftIcon="call"
+              value={phone}
+              onChangeText={setPhone}
+              error={errors.phone}
+              containerStyle={styles.field}
+            />
+
+            <TextField
+              placeholder="Password"
+              secureTextEntry={!showPassword}
+              autoCapitalize="none"
+              autoComplete="new-password"
+              textContentType="newPassword"
+              leftIcon="lock-closed"
+              rightIcon={showPassword ? "eye-off-outline" : "eye-outline"}
+              onRightIconPress={() => setShowPassword((v) => !v)}
+              value={password}
+              onChangeText={setPassword}
+              error={errors.password}
+              containerStyle={styles.field}
+            />
+
+            <Button
+              label="Create Account"
+              loading={submitting}
+              onPress={onSubmit}
+              style={[styles.cta, { backgroundColor: lightColors.buttonPrimary }]}
+              textStyle={{ color: lightColors.buttonText }}
+            />
+          </View>
+
+          <View style={styles.spacer} />
+
+          <View style={styles.footer}>
+            <Text style={[typography.bodyMd as TextStyle, styles.footerText]}>
+              Already have an account?{" "}
             </Text>
-          </Pressable>
-        </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+            <Pressable
+              onPress={() => navigation.navigate("SignIn")}
+              hitSlop={8}
+            >
+              <Text style={[typography.labelLg as TextStyle, styles.link]}>
+                Sign In
+              </Text>
+            </Pressable>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </ImageBackground>
   );
 }
 
 export default SignUpScreen;
 
 const styles = StyleSheet.create({
+  bg: { flex: 1 },
   flex: { flex: 1 },
   content: {
-    paddingHorizontal: spacing.xl,
+    flexGrow: 1,
+    paddingHorizontal: spacing.xxl,
   },
   title: {
-    marginBottom: spacing.xs,
+    marginTop: spacing.xl,
     textAlign: "center",
+    color: lightColors.primaryDark,
+    fontWeight: "800",
   },
   subtitle: {
-    marginBottom: spacing.xxxl,
+    marginTop: spacing.xs,
     textAlign: "center",
+    color: lightColors.textSecondary,
+  },
+  form: {
+    marginTop: spacing.xl,
   },
   row: {
     flexDirection: "row",
@@ -216,12 +213,20 @@ const styles = StyleSheet.create({
     marginTop: spacing.lg,
   },
   cta: {
-    marginTop: spacing.xxl,
+    marginTop: spacing.xl,
+  },
+  spacer: {
+    minHeight: spacing.xxl,
   },
   footer: {
-    marginTop: spacing.xl,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+  },
+  footerText: {
+    color: lightColors.textSecondary,
+  },
+  link: {
+    color: lightColors.primary,
   },
 });

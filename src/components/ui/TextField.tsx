@@ -11,9 +11,9 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import { lightColors } from "../../../constants/colors";
 import { radius, spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
-import { useTheme } from "../../../context/theme";
 
 type Props = TextInputProps & {
   label?: string;
@@ -25,6 +25,8 @@ type Props = TextInputProps & {
   containerStyle?: StyleProp<ViewStyle>;
 };
 
+// Styled for the auth screens, which sit on a fixed light background image —
+// fixed light colours regardless of theme so the field stays legible.
 const TextField = forwardRef<TextInput, Props>(function TextField(
   {
     label,
@@ -41,19 +43,12 @@ const TextField = forwardRef<TextInput, Props>(function TextField(
   },
   ref,
 ) {
-  const { colors } = useTheme();
   const [focused, setFocused] = useState(false);
-
-  const borderColor = error
-    ? colors.inputBorderError
-    : focused
-      ? colors.inputBorderFocused
-      : colors.inputBorder;
 
   return (
     <View style={[styles.wrap, containerStyle]}>
       {label ? (
-        <Text style={[typography.labelMd as TextStyle, styles.label, { color: colors.inputLabel }]}>
+        <Text style={[typography.labelMd as TextStyle, styles.label]}>
           {label}
         </Text>
       ) : null}
@@ -61,28 +56,26 @@ const TextField = forwardRef<TextInput, Props>(function TextField(
       <View
         style={[
           styles.field,
-          {
-            backgroundColor: focused ? colors.inputFillFocused : colors.inputFill,
-            borderColor,
-          },
+          focused && styles.fieldFocused,
+          !!error && styles.fieldError,
         ]}
       >
         {leftIcon ? (
           <Ionicons
             name={leftIcon}
             size={20}
-            color={colors.inputIcon}
+            color={lightColors.primary}
             style={styles.leftIcon}
           />
         ) : null}
 
         <TextInput
           ref={ref}
-          placeholderTextColor={colors.inputPlaceholder}
+          placeholderTextColor={lightColors.textPlaceholder}
           style={[
             styles.input,
             typography.bodyLg as TextStyle,
-            { color: colors.textPrimary },
+            { color: lightColors.textPrimary },
             style,
           ]}
           onFocus={(e) => {
@@ -97,18 +90,26 @@ const TextField = forwardRef<TextInput, Props>(function TextField(
         />
 
         {rightIcon ? (
-          <Pressable onPress={onRightIconPress} hitSlop={8} style={styles.rightIcon}>
-            <Ionicons name={rightIcon} size={20} color={colors.inputIcon} />
+          <Pressable
+            onPress={onRightIconPress}
+            hitSlop={8}
+            style={styles.rightIcon}
+          >
+            <Ionicons
+              name={rightIcon}
+              size={20}
+              color={lightColors.inputIcon}
+            />
           </Pressable>
         ) : null}
       </View>
 
       {error ? (
-        <Text style={[typography.caption as TextStyle, { color: colors.textError, marginTop: spacing.xs }]}>
+        <Text style={[typography.caption as TextStyle, styles.errorText]}>
           {error}
         </Text>
       ) : helper ? (
-        <Text style={[typography.caption as TextStyle, { color: colors.textSecondary, marginTop: spacing.xs }]}>
+        <Text style={[typography.caption as TextStyle, styles.helperText]}>
           {helper}
         </Text>
       ) : null}
@@ -124,23 +125,47 @@ const styles = StyleSheet.create({
   },
   label: {
     marginBottom: spacing.sm,
+    color: lightColors.inputLabel,
   },
   field: {
     flexDirection: "row",
     alignItems: "center",
-    borderWidth: 1,
-    borderRadius: radius.lg,
+    backgroundColor: lightColors.white,
+    borderRadius: radius.xl,
+    borderWidth: 1.5,
+    borderColor: "transparent",
     paddingHorizontal: spacing.lg,
-    minHeight: 52,
+    minHeight: 56,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 10,
+    elevation: 2,
+  },
+  fieldFocused: {
+    borderColor: lightColors.primary,
+  },
+  fieldError: {
+    borderColor: lightColors.inputBorderError,
   },
   input: {
     flex: 1,
-    paddingVertical: spacing.sm,
+    paddingVertical: spacing.md,
   },
   leftIcon: {
     marginRight: spacing.md,
   },
   rightIcon: {
     marginLeft: spacing.md,
+  },
+  errorText: {
+    color: lightColors.textError,
+    marginTop: spacing.xs,
+    marginLeft: spacing.xs,
+  },
+  helperText: {
+    color: lightColors.textSecondary,
+    marginTop: spacing.xs,
+    marginLeft: spacing.xs,
   },
 });
