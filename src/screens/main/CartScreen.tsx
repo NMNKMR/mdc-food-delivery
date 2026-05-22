@@ -2,7 +2,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { useState } from "react";
 import {
-  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -15,11 +14,9 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { radius, spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
 import { useTheme } from "../../../context/theme";
-import {
-  CartLine,
-  useCartStore,
-  useCartTotal,
-} from "../../../store/cartStore";
+import { useCartStore, useCartTotal } from "../../../store/cartStore";
+import CartItemRow from "../../components/cart/CartItemRow";
+import SummaryRow from "../../components/cart/SummaryRow";
 import { AppStackParamList } from "../../navigation/types";
 
 type Props = NativeStackScreenProps<AppStackParamList, "Cart">;
@@ -93,7 +90,7 @@ function CartScreen({ navigation }: Props) {
               { color: colors.textPrimary, marginTop: spacing.lg },
             ]}
           >
-            Your cart is empty
+            Zero Calories !
           </Text>
           <Text
             style={[
@@ -274,17 +271,14 @@ function CartScreen({ navigation }: Props) {
               <SummaryRow
                 label="Subtotal"
                 value={`₹${subtotal.toFixed(2)}`}
-                colors={colors}
               />
               <SummaryRow
                 label="Delivery Fee"
                 value={`₹${DELIVERY_FEE.toFixed(2)}`}
-                colors={colors}
               />
               <SummaryRow
                 label="Service Tax"
                 value={`₹${serviceTax.toFixed(2)}`}
-                colors={colors}
               />
               <View
                 style={[
@@ -348,116 +342,6 @@ function CartScreen({ navigation }: Props) {
   );
 }
 
-type CartItemRowProps = {
-  line: CartLine;
-  onAdd: () => void;
-  onDecrement: () => void;
-};
-
-function CartItemRow({ line, onAdd, onDecrement }: CartItemRowProps) {
-  const { colors } = useTheme();
-
-  return (
-    <View style={[styles.itemCard, { backgroundColor: colors.surface }]}>
-      <Image source={line.image} style={styles.itemImage} resizeMode="cover" />
-      <View style={styles.itemBody}>
-        <View style={styles.itemTopRow}>
-          <Text
-            style={[
-              typography.labelLg as TextStyle,
-              styles.itemName,
-              { color: colors.textPrimary, fontSize: 15 },
-            ]}
-            numberOfLines={1}
-          >
-            {line.name}
-          </Text>
-          <Text
-            style={[
-              typography.labelLg as TextStyle,
-              { color: colors.textPrimary, fontSize: 15 },
-            ]}
-          >
-            ₹{(line.price * line.quantity).toFixed(2)}
-          </Text>
-        </View>
-
-        <View style={styles.itemBottomRow}>
-          <Text
-            style={[
-              typography.bodyMd as TextStyle,
-              { color: colors.primary },
-            ]}
-          >
-            ₹{line.price.toFixed(0)} each
-          </Text>
-          <View
-            style={[
-              styles.stepper,
-              { backgroundColor: colors.surfaceContainer },
-            ]}
-          >
-            <Pressable
-              onPress={onDecrement}
-              hitSlop={6}
-              style={styles.stepBtn}
-              accessibilityLabel="Decrease quantity"
-            >
-              <Ionicons name="remove" size={16} color={colors.iconPrimary} />
-            </Pressable>
-            <Text
-              style={[
-                typography.labelLg as TextStyle,
-                styles.stepCount,
-                { color: colors.textPrimary },
-              ]}
-            >
-              {line.quantity}
-            </Text>
-            <Pressable
-              onPress={onAdd}
-              hitSlop={6}
-              style={styles.stepBtn}
-              accessibilityLabel="Increase quantity"
-            >
-              <Ionicons name="add" size={16} color={colors.iconPrimary} />
-            </Pressable>
-          </View>
-        </View>
-      </View>
-    </View>
-  );
-}
-
-type SummaryRowProps = {
-  label: string;
-  value: string;
-  colors: ReturnType<typeof useTheme>["colors"];
-};
-
-function SummaryRow({ label, value, colors }: SummaryRowProps) {
-  return (
-    <View style={styles.summaryRow}>
-      <Text
-        style={[
-          typography.bodyLg as TextStyle,
-          { color: colors.textSecondary },
-        ]}
-      >
-        {label}
-      </Text>
-      <Text
-        style={[
-          typography.bodyLg as TextStyle,
-          { color: colors.textPrimary },
-        ]}
-      >
-        {value}
-      </Text>
-    </View>
-  );
-}
-
 export default CartScreen;
 
 const styles = StyleSheet.create({
@@ -482,7 +366,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    paddingHorizontal: spacing.xxxl,
+    paddingHorizontal: spacing.xl,
   },
   emptyIcon: {
     width: 96,
@@ -499,60 +383,6 @@ const styles = StyleSheet.create({
   },
   section: {
     marginTop: spacing.sm,
-  },
-  itemCard: {
-    flexDirection: "row",
-    borderRadius: radius.lg,
-    padding: spacing.md,
-    marginBottom: spacing.md,
-    elevation: 1,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-  },
-  itemImage: {
-    width: 72,
-    height: 72,
-    borderRadius: radius.md,
-  },
-  itemBody: {
-    flex: 1,
-    marginLeft: spacing.md,
-    justifyContent: "space-between",
-  },
-  itemTopRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  itemName: {
-    flex: 1,
-    marginRight: spacing.sm,
-  },
-  itemBottomRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginTop: spacing.sm,
-  },
-  stepper: {
-    flexDirection: "row",
-    alignItems: "center",
-    borderRadius: radius.full,
-    paddingHorizontal: spacing.xs,
-  },
-  stepBtn: {
-    width: 28,
-    height: 28,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  stepCount: {
-    minWidth: 20,
-    textAlign: "center",
-    fontSize: 14,
-    fontWeight: "600",
   },
   card: {
     borderRadius: radius.lg,
@@ -615,12 +445,6 @@ const styles = StyleSheet.create({
   summaryDivider: {
     height: 1,
     marginVertical: spacing.md,
-  },
-  summaryRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: spacing.xs,
   },
   totalRow: {
     flexDirection: "row",
