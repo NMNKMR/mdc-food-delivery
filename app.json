@@ -3,6 +3,7 @@
     "name": "mdc-food-delivery",
     "slug": "mdc-food-delivery",
     "version": "1.0.0",
+    "scheme": "nutrigo",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

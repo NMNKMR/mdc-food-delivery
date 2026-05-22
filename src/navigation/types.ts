@@ -26,13 +26,8 @@ export type AppStackParamList = {
   Cart: undefined;
 };
 
-export type RootStackParamList = {
-  Auth: NavigatorScreenParams<AuthStackParamList>;
-  App: NavigatorScreenParams<AppStackParamList>;
-};
-
 declare global {
   namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
+    interface RootParamList extends AppStackParamList, AuthStackParamList {}
   }
 }

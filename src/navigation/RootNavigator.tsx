@@ -9,6 +9,7 @@ import { useTheme } from "../../context/theme";
 import { useAuthStore } from "../../store/authStore";
 import { AppNavigator } from "./AppNavigator";
 import { AuthNavigator } from "./AuthNavigator";
+import { linking } from "./linking";
 
 export function RootNavigator() {
   const { colors, isDarkMode } = useTheme();
@@ -29,16 +30,18 @@ export function RootNavigator() {
     },
   };
 
+  const splash = (
+    <View style={[styles.splash, { backgroundColor: colors.background }]}>
+      <ActivityIndicator color={colors.primary} />
+    </View>
+  );
+
   if (!hasHydrated) {
-    return (
-      <View style={[styles.splash, { backgroundColor: colors.background }]}>
-        <ActivityIndicator color={colors.primary} />
-      </View>
-    );
+    return splash;
   }
 
   return (
-    <NavigationContainer theme={navTheme}>
+    <NavigationContainer theme={navTheme} linking={linking} fallback={splash}>
       {isLoggedIn ? <AppNavigator /> : <AuthNavigator />}
     </NavigationContainer>
   );
