@@ -7,7 +7,7 @@ import {
   TextStyle,
   View,
 } from "react-native";
-import { MenuItem, VegType } from "../../../constants/data";
+import { MenuItem, Nutrition, VegType } from "../../../constants/data";
 import { lightColors } from "../../../constants/colors";
 import { radius, spacing } from "../../../constants/spacing";
 import { typography } from "../../../constants/typography";
@@ -60,6 +60,7 @@ function MenuItemCard({ item, showDivider = true }: Props) {
           >
             {item.description}
           </Text>
+          <NutritionRow nutrition={item.nutrition} />
           <Text
             style={[
               typography.labelLg as TextStyle,
@@ -144,6 +145,47 @@ function MenuItemCard({ item, showDivider = true }: Props) {
   );
 }
 
+type NutritionStat = {
+  icon: React.ComponentProps<typeof Ionicons>["name"];
+  value: string;
+};
+
+function NutritionRow({ nutrition }: { nutrition: Nutrition }) {
+  const { colors } = useTheme();
+
+  const stats: NutritionStat[] = [
+    { icon: "flame-outline", value: `${nutrition.calories} cal` },
+    { icon: "barbell-outline", value: `${nutrition.protein}g protein` },
+    { icon: "leaf-outline", value: `${nutrition.carbs}g carbs` },
+    { icon: "water-outline", value: `${nutrition.fat}g fat` },
+  ];
+
+  return (
+    <View style={styles.nutritionRow}>
+      {stats.map((stat) => (
+        <View
+          key={stat.icon}
+          style={[
+            styles.nutritionChip,
+            { backgroundColor: colors.surfaceContainerLow },
+          ]}
+        >
+          <Ionicons name={stat.icon} size={12} color={colors.primary} />
+          <Text
+            style={[
+              typography.caption as TextStyle,
+              styles.nutritionText,
+              { color: colors.textSecondary },
+            ]}
+          >
+            {stat.value}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 function VegBadge({ type }: { type: VegType }) {
   const color =
     type === "veg"
@@ -186,6 +228,24 @@ const styles = StyleSheet.create({
   },
   desc: {
     marginTop: 4,
+  },
+  nutritionRow: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.xs,
+    marginTop: spacing.sm,
+  },
+  nutritionChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+    borderRadius: radius.full,
+  },
+  nutritionText: {
+    fontSize: 11,
+    fontWeight: "600",
   },
   price: {
     marginTop: spacing.sm,

@@ -171,6 +171,13 @@ export type MenuCategory = {
 
 export type VegType = "veg" | "non-veg" | "egg";
 
+export type Nutrition = {
+  calories: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
+
 export type MenuItem = {
   id: string;
   name: string;
@@ -179,6 +186,7 @@ export type MenuItem = {
   image: ImageSourcePropType;
   category: string;
   vegType: VegType;
+  nutrition: Nutrition;
 };
 
 export const menuCategories: MenuCategory[] = [
@@ -261,6 +269,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item1-resize.png"),
     category: "popular",
     vegType: "veg",
+    nutrition: { calories: 420, protein: 15, carbs: 52, fat: 18 },
   },
   {
     id: "m2",
@@ -271,6 +280,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item2-resize.png"),
     category: "popular",
     vegType: "non-veg",
+    nutrition: { calories: 510, protein: 34, carbs: 38, fat: 22 },
   },
   {
     id: "m3",
@@ -281,6 +291,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item3-resize.png"),
     category: "popular",
     vegType: "veg",
+    nutrition: { calories: 320, protein: 9, carbs: 30, fat: 19 },
   },
   {
     id: "m4",
@@ -291,6 +302,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item4-resize.png"),
     category: "popular",
     vegType: "veg",
+    nutrition: { calories: 380, protein: 8, carbs: 62, fat: 12 },
   },
   {
     id: "m5",
@@ -301,6 +313,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item5-resize.png"),
     category: "bowls",
     vegType: "veg",
+    nutrition: { calories: 460, protein: 16, carbs: 48, fat: 21 },
   },
   {
     id: "m6",
@@ -311,6 +324,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item6-resize.png"),
     category: "bowls",
     vegType: "veg",
+    nutrition: { calories: 400, protein: 14, carbs: 55, fat: 14 },
   },
   {
     id: "m7",
@@ -321,6 +335,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item7-resize.png"),
     category: "bowls",
     vegType: "veg",
+    nutrition: { calories: 480, protein: 18, carbs: 60, fat: 17 },
   },
   {
     id: "m8",
@@ -331,6 +346,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item8-resize.png"),
     category: "salads",
     vegType: "veg",
+    nutrition: { calories: 290, protein: 11, carbs: 18, fat: 20 },
   },
   {
     id: "m9",
@@ -341,6 +357,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item9-resize.png"),
     category: "salads",
     vegType: "veg",
+    nutrition: { calories: 250, protein: 7, carbs: 28, fat: 13 },
   },
   {
     id: "m10",
@@ -351,6 +368,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item10-resize.png"),
     category: "wraps",
     vegType: "veg",
+    nutrition: { calories: 360, protein: 12, carbs: 44, fat: 15 },
   },
   {
     id: "m11",
@@ -360,6 +378,7 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item11-resize.png"),
     category: "smoothies",
     vegType: "veg",
+    nutrition: { calories: 210, protein: 5, carbs: 42, fat: 4 },
   },
   {
     id: "m12",
@@ -369,5 +388,6 @@ export const menu: MenuItem[] = [
     image: require("../assets/images/items/menu-item12-resize.png"),
     category: "smoothies",
     vegType: "veg",
+    nutrition: { calories: 230, protein: 6, carbs: 40, fat: 6 },
   },
 ];
