@@ -9,16 +9,16 @@ React Navigation** (no Expo Router).
 
 ## Demo Video -> https://drive.google.com/file/d/1RBUoPGcj0OoXEyVMECkM_n7ImofGYejG/view?usp=sharing
 ## Screenshots:
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/f1aa4dbd-8b05-41a7-8dc7-66c1af912e16" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/4a7e3b18-e5b1-4101-8f92-f4f05c1233f3" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/4b4f7708-6fbc-4eb4-ace5-e8ac13cb8c2a" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/11babdd1-98ad-46f6-bb76-5727937f14cc" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/bec1e15f-d676-443d-acb8-7e66c412964f" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/6757ab76-19c6-425b-a9fb-feba2f7dd257" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/59d4645e-3235-48ac-be0c-04e40dd083b2" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/0c995e51-e5b4-4c82-9544-6b2f2e506926" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/020cca38-0f90-4f2d-a4f6-56a3b13564aa" />
-<img width="369" height="400" alt="image" src="https://github.com/user-attachments/assets/5078a2c4-89de-41ff-9283-1ee951832ea2" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/f1aa4dbd-8b05-41a7-8dc7-66c1af912e16" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/4a7e3b18-e5b1-4101-8f92-f4f05c1233f3" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/4b4f7708-6fbc-4eb4-ace5-e8ac13cb8c2a" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/11babdd1-98ad-46f6-bb76-5727937f14cc" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/bec1e15f-d676-443d-acb8-7e66c412964f" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/6757ab76-19c6-425b-a9fb-feba2f7dd257" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/59d4645e-3235-48ac-be0c-04e40dd083b2" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/0c995e51-e5b4-4c82-9544-6b2f2e506926" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/020cca38-0f90-4f2d-a4f6-56a3b13564aa" />
+<img width="250" height="480" alt="image" src="https://github.com/user-attachments/assets/5078a2c4-89de-41ff-9283-1ee951832ea2" />
 
 ---
 
